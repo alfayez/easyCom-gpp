@@ -1,6 +1,6 @@
 
-rm /home/alfayez/oe/local/recipes/gnuradio/gpp_lib/loopgppAl2.o
-rm /home/alfayez/oe/local/recipes/gnuradio/gpp_lib/gnuradio_beagleboard_dsp.h
+rm /home/alfayez/secondary_hd/oe/openembedded/recipes/gnuradio/gpp_lib/loopgppAl2.o
+rm /home/alfayez/secondary_hd/oe/openembedded/recipes/gnuradio/gpp_lib/gnuradio_beagleboard_dsp.h
 #rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.so.1
 #rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.a
 #rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.lib
@@ -16,7 +16,7 @@ rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.so.1
 rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.a
 rm ../../../BUILD/EXPORT/DEBUG/loopgppAl2.lib
 
-cp ../../../BUILD/EXPORT/DEBUG/loopgppAl2.o /home/alfayez/oe/local/recipes/gnuradio/gpp_lib/
-cp gnuradio_beagleboard_dsp.h /home/alfayez/oe/local/recipes/gnuradio/gpp_lib/
+cp ../../../BUILD/EXPORT/DEBUG/loopgppAl2.o /home/alfayez/secondary_hd/oe/openembedded/recipes/gnuradio/gpp_lib/
+cp gnuradio_beagleboard_dsp.h /home/alfayez/secondary_hd/oe/openembedded/recipes/gnuradio/gpp_lib/
 #umount /media/AL_FAYEZ
 
