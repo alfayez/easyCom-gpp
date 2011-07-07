@@ -6,12 +6,12 @@ PRIORITY = "optional"
 LICENSE = "GPL"
 DEPENDS = "linux-libc-headers"
 
-PN = "gpp-lib"
+PN = "easycom-gpp"
 PV = "0.1"
 
-SRC_URI = "file://gpp_lib/loopgppAl2.o \
-	file://gpp_lib/gnuradio_beagleboard_dsp.h"
-S = "${TMPDIR}/work/armv7a-angstrom-linux-gnueabi/gpp-lib-0.1-r0/gpp_lib"
+SRC_URI = "file://easycom-gpp/loopgppAl2.o \
+	file://easycom-gpp/gnuradio_beagleboard_dsp.h"
+S = "${TMPDIR}/work/armv7a-angstrom-linux-gnueabi/easycom-gpp-0.1-r0/easycom-gpp"
 
 LIBLOOPGPPAL2_TARGET = ${STAGING_DIR_TARGET}/usr/lib
 
@@ -42,4 +42,4 @@ do_stage() {
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
-
+PROVIDES += "easycom-gpp"
