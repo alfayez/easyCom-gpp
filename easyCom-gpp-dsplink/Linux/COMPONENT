@@ -19,7 +19,7 @@
 #   ============================================================================
 
 COMP_NAME       := LOOP
-COMP_PATH       := $(TI_DSPLINK_GPPROOT)$(DIRSEP)src$(DIRSEP)samples$(DIRSEP)easyCom-gpp
+COMP_PATH       := $(TI_DSPLINK_GPPROOT)$(DIRSEP)src$(DIRSEP)samples$(DIRSEP)easyCom-gpp-dsplink
 COMP_TYPE       := LIB
 COMP_TARGET     := loopgppAl2
 COMP_MEMSPACE   := USER
