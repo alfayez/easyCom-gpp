@@ -1213,6 +1213,18 @@ DSP_STATUS transmit_data_cs(Uint8 processorId, const gr_complex *gpp_local0, buf
 	int temp_interpolation=0;
 	int scale_mult = pow(2, scale); 
 
+	
+	if (d_ntaps > 0)
+	{
+		k=d_ntaps-4;
+		memset((short *)gpp_dsp_buff, 0, sizeof(gpp_dsp_buff[0])*k*2);
+		#ifdef DEBUG
+		printf("taps = %d and buff = %d\n", d_ntaps, buff_size);
+		#endif
+	}
+	//else
+	//	k=0;
+	
 	#ifdef DEBUG
 	printf("write rf data to mem location = 0x%x\n", gpp_dsp_buff);
 	#endif
@@ -1246,7 +1258,7 @@ DSP_STATUS transmit_data_cs(Uint8 processorId, const gr_complex *gpp_local0, buf
 				temp_short1 = (short) (gpp_local0[i].imag());	
 			
 				#ifdef DEBUG
-				printf("FIXED POINT OPTION\n");
+				//printf("FIXED POINT OPTION\n");
 				#endif
 			}
 			else
@@ -1257,21 +1269,44 @@ DSP_STATUS transmit_data_cs(Uint8 processorId, const gr_complex *gpp_local0, buf
 				temp_short1 = (short) (temp_float1);
 			
 				#ifdef DEBUG
-				printf("FLOATING POINT OPTION\n");		
+				//printf("FLOATING POINT OPTION\n");		
 				#endif
 			}
 			
-			memcpy((short *)gpp_dsp_buff+k, &temp_short0, sizeof(buff_size));
+			memcpy((short *)gpp_dsp_buff+k, &temp_short0, sizeof(bufferType));
 			memcpy((short *)gpp_dsp_buff+(k+1), &temp_short1, sizeof(bufferType));
+
+			//memcpy(&temp_short0, (short *)gpp_dsp_buff+k, sizeof(bufferType));
+			//memcpy(&temp_short1, (short *)gpp_dsp_buff+(k+1), sizeof(bufferType));		
+
+
 
 			#ifdef DEBUG
 			//if (i < 5)
-				printf("TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)(temp_short0 / scale), temp_short1, 
-				(float)(temp_short1 / scale));
+				printf("TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)((float)temp_short0 / (float)scale_mult), temp_short1, (float)((float)temp_short1 / (float)scale_mult));
 			#endif
 			
 			k = k + 2;
 		}
+		#ifdef DEBUG
+		k=0;
+		for (int i=0; i<(buff_size); i=i+1)
+		{
+				
+			memcpy(&temp_short0, (short *)gpp_dsp_buff+k, sizeof(bufferType));
+			memcpy(&temp_short1, (short *)gpp_dsp_buff+(k+1), sizeof(bufferType));		
+
+
+			//if (i < 5)
+			printf("ALIG TX GPP ---> DSP ");
+			printf("[%d]  = ", i);
+			printf("%d ", temp_short0);
+			printf(" & ");
+			printf("%d ", temp_short1);
+			printf(" \n");
+			k = k + 2;
+		}
+		#endif
 	}
 	else if (interp > 1)
 	{
@@ -1311,7 +1346,7 @@ DSP_STATUS transmit_data_cs(Uint8 processorId, const gr_complex *gpp_local0, buf
 					//k = k + 2*interp;
 				#ifdef DEBUG
 				//if (i < 5)
-					printf("TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)(temp_short0 / scale), temp_short1, 
+					printf("INTERP TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)(temp_short0 / scale), temp_short1, 
 					(float)(temp_short1 / scale));
 				#endif
 				
@@ -1324,8 +1359,7 @@ DSP_STATUS transmit_data_cs(Uint8 processorId, const gr_complex *gpp_local0, buf
 				k = k + 2;
 				#ifdef DEBUG
 				//if (i < 5)
-					printf("TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)(temp_short0 / scale), temp_short1, 
-					(float)(temp_short1 / scale));
+					printf("NON INTERP TX GPP ---> DSP   [%d]  = %d (%f) & %d (%f)\n", i, temp_short0, (float)(temp_short0 / scale), temp_short1, (float)(temp_short1 / scale));
 				#endif			
 			}
 		}	
@@ -1757,15 +1791,14 @@ DSP_STATUS receive_data_cs(Uint8 processorId, gr_complex *gpp_local0, bufferType
         
 	for (int i=0; i<(buff_size); i=i+1)
 	{
-		//temp_short = (short) (gpp_local[i]*scale);
 		
-		//memcpy(gpp_dsp_buff+sizeof(buff_size)+sizeof(buff_size)*i, &temp_short, sizeof(bufferType));
-		//memcpy(&temp_short0, (short *) LOOP_IOReq.buffer+k*sizeof(bufferType), sizeof(bufferType));
-		//memcpy(&temp_short1, (short *) LOOP_IOReq.buffer+(k+1)*sizeof(bufferType), sizeof(bufferType));		
+		//memcpy(&temp_short0, (short *) LOOP_IOReq.buffer+k, sizeof(bufferType));
+		//memcpy(&temp_short1, (short *) LOOP_IOReq.buffer+(k+1), sizeof(bufferType));		
 		
-		memcpy(&temp_short0, (short *) LOOP_IOReq.buffer+k, sizeof(bufferType));
-		memcpy(&temp_short1, (short *) LOOP_IOReq.buffer+(k+1), sizeof(bufferType));		
-		
+		memcpy(&temp_short0, (short *)gpp_dsp_buff+k, sizeof(bufferType));
+		memcpy(&temp_short1, (short *)gpp_dsp_buff+(k+1), sizeof(bufferType));		
+
+
 		//memcpy(gpp_local, (bufferType *) LOOP_IOReq.buffer, buff_size * sizeof(bufferType));
 		//gpp_local[i] = ((float)temp_short)/scale;
 		//gpp_local0[k] = ((float)temp_short0);
